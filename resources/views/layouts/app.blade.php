@@ -1,36 +1,48 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ config('app.name', 'Finance Manager') }}</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-sans antialiased bg-gray-100">
+    <div x-data="{ collapsed: false, mobileOpen: false }" class="min-h-screen flex">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+        <!-- Backdrop -->
+        <div x-show="mobileOpen" @click="mobileOpen = false"
+        class="fixed inset-0 bg-black bg-opacity-30 z-20 md:hidden"></div>
+        
+        <!-- Sidebar Wrapper -->
+        <div
+            class="md:relative fixed top-0 left-0 h-full z-30 transform transition-transform duration-300"
+            :class="{ '-translate-x-full md:translate-x-0': !mobileOpen, 'translate-x-0': mobileOpen }"
+        >
+            <x-sidebar />
         </div>
-    </body>
+
+
+        </div>
+
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <!-- Topbar -->
+            <header class="bg-white shadow p-4 flex justify-between items-center md:hidden">
+                <button @click="mobileOpen = !mobileOpen" class="text-gray-600 hover:text-gray-900">
+                    <x-heroicon-o-bars-3 class="w-6 h-6"/>
+                </button>
+                <span class="font-semibold">Finance Manager</span>
+            </header>
+            
+
+
+            <div class="p-4">
+                {{ $slot }}
+            </div>
+        </main>
+
+    </div>
+</body>
 </html>
