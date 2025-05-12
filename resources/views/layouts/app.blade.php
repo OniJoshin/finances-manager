@@ -1,48 +1,44 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ config('app.name', 'Finance Manager') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body class="font-sans antialiased bg-gray-100">
-    <div x-data="{ collapsed: false, mobileOpen: false }" class="min-h-screen flex">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{{ config('app.name', 'Finance Manager') }}</title>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body class="bg-gray-100 font-sans antialiased">
+    <div x-data="{ collapsed: false }" class="min-h-screen flex">
 
-        <!-- Backdrop -->
-        <div x-show="mobileOpen" @click="mobileOpen = false"
-        class="fixed inset-0 bg-black bg-opacity-30 z-20 md:hidden"></div>
-        
-        <!-- Sidebar Wrapper -->
+        <!-- Sidebar Wrapper (Fixed Width + Collapsible) -->
         <div
-            class="md:relative fixed top-0 left-0 h-full z-30 transform transition-transform duration-300"
-            :class="{ '-translate-x-full md:translate-x-0': !mobileOpen, 'translate-x-0': mobileOpen }"
+            class="fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-30"
+            :class="{ 'w-16': collapsed, 'w-64': !collapsed }"
         >
-            <x-sidebar />
+            <x-sidebar collapsed="@{{ '{{ collapsed.toString() }}' }}" />
         </div>
 
+        <!-- Main Content Wrapper (Offset by Sidebar Width) -->
+        <!-- Main Content Wrapper -->
+<div
+    class="flex-1 flex flex-col min-h-screen transition-all duration-300"
+    :style="collapsed ? 'padding-left: 4rem' : 'padding-left: 16rem'"
+>
+    <!-- Header -->
+    <header class="bg-white shadow px-4 py-3 flex items-center justify-between">
+        <button @click="collapsed = !collapsed" class="text-gray-600 hover:text-gray-800">
+            <x-heroicon-o-bars-3 class="w-6 h-6" />
+        </button>
+        <h2 class="font-semibold text-lg">Finance Manager</h2>
+    </header>
 
-        </div>
-
-
-        <!-- Main Content -->
-        <main class="flex-1">
-            <!-- Topbar -->
-            <header class="bg-white shadow p-4 flex justify-between items-center md:hidden">
-                <button @click="mobileOpen = !mobileOpen" class="text-gray-600 hover:text-gray-900">
-                    <x-heroicon-o-bars-3 class="w-6 h-6"/>
-                </button>
-                <span class="font-semibold">Finance Manager</span>
-            </header>
-            
-
-
-            <div class="p-4">
-                {{ $slot }}
-            </div>
-        </main>
+    <!-- Page Content -->
+    <main class="flex-1 p-4">
+        {{ $slot }}
+    </main>
+</div>
 
     </div>
 </body>
+
 </html>
