@@ -13,7 +13,7 @@
         <!-- Sidebar Wrapper (Fixed Width + Collapsible) -->
         <div
             class="fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-30"
-            :class="{ 'w-16': collapsed, 'w-64': !collapsed }"
+            :class="{ 'w-20': collapsed, 'w-64': !collapsed }"
         >
             <x-sidebar collapsed="@{{ '{{ collapsed.toString() }}' }}" />
         </div>
@@ -22,7 +22,7 @@
         <!-- Main Content Wrapper -->
 <div
     class="flex-1 flex flex-col min-h-screen transition-all duration-300"
-    :style="collapsed ? 'padding-left: 4rem' : 'padding-left: 16rem'"
+    :style="collapsed ? 'padding-left: 5rem' : 'padding-left: 16rem'"
 >
     <!-- Header -->
     <header class="bg-white shadow px-4 py-3 flex items-center justify-between">
