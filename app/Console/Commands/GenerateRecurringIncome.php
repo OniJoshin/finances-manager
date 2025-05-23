@@ -20,11 +20,11 @@ class GenerateRecurringIncome extends Command
         $recurrings = RecurringIncome::all();
 
         foreach ($recurrings as $recurring) {
-            $last = $recurring->last_generated_at ?? $recurring->start_date->copy()->subDay();
+            $referenceDate = $recurring->last_generated_at ?? $recurring->start_date->copy()->subMonth();
             $today = now()->startOfDay();
             $endOfMonth = now()->endOfMonth();
 
-            $nextDue = $last;
+            $nextDue = $referenceDate;
 
             while (true) {
                 $nextDue = $this->getNextDueDate($nextDue, $recurring);
@@ -71,19 +71,23 @@ class GenerateRecurringIncome extends Command
 
 
             // Create actual income entry
-            Income::create([
+            $income = Income::create([
                 'user_id' => $recurring->user_id,
                 'source' => $recurring->source,
                 'amount' => $recurring->amount,
                 'frequency' => $recurring->frequency,
                 'received_at' => $nextDue->toDateString(),
                 'notes' => $recurring->notes,
-                'category_id' => null, // Or allow link later
+                'category_id' => $recurring->category_id,
             ]);
+
+            $income->tags()->sync($recurring->tags->pluck('id'));
 
             // Update last_generated_at
             $recurring->last_generated_at = $nextDue;
             $recurring->save();
+
+            break;
         }
 
         $this->info('Recurring income generation complete.');

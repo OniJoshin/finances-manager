@@ -8,10 +8,13 @@
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-2">Monthly Summary</h2>
                 <p class="text-sm text-gray-500">Income vs Expenses</p>
-                <div class="h-24 bg-gray-100 rounded mt-2 flex items-center justify-center text-gray-400">
-                    Coming soon...
+                <div class="mt-2 text-sm">
+                    <div class="text-green-600 font-semibold">Income: £{{ number_format($monthlyIncomeTotal, 2) }}</div>
+                    <div class="text-red-600 font-semibold">Expenses: £{{ number_format($monthlyExpenseTotal, 2) }}</div>
+                    <div class="mt-1 text-blue-600 font-semibold">Net: £{{ number_format($monthlyIncomeTotal - $monthlyExpenseTotal, 2) }}</div>
                 </div>
             </div>
+
 
             <!-- Upcoming Bills (placeholder) -->
             <div class="bg-white p-4 rounded-xl shadow">
@@ -91,5 +94,34 @@
                 </table>
             </div>
         </div>
+
+        <div class="mt-10">
+            <h2 class="text-xl font-bold mb-4">Recent Expenses</h2>
+            <div class="bg-white shadow rounded-xl overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-100 text-left">
+                        <tr>
+                            <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">Amount</th>
+                            <th class="px-4 py-2">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($recentExpenses as $expense)
+                            <tr class="border-t">
+                                <td class="px-4 py-2">{{ $expense->name }}</td>
+                                <td class="px-4 py-2 text-red-600 font-semibold">£{{ number_format($expense->amount, 2) }}</td>
+                                <td class="px-4 py-2">{{ $expense->spent_at->format('Y-m-d') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="px-4 py-4 text-center text-gray-500">No expense entries yet.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </x-app-layout>

@@ -2,18 +2,24 @@
 
 namespace App\Models;
 
+use App\Models\User;
+use App\Models\Category;
+use App\Models\RecurringExpenseLog;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class RecurringIncome extends Model
+class RecurringExpense extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
-        'source',
+        'name',
         'amount',
         'frequency',
         'start_date',
         'day_of_month',
+        'category_id',
         'notes',
         'last_generated_at',
     ];
@@ -23,7 +29,9 @@ class RecurringIncome extends Model
         'last_generated_at' => 'date',
     ];
 
-    public function user(): BelongsTo
+    // 🔗 Relationships
+
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -33,8 +41,14 @@ class RecurringIncome extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function logs()
+    {
+        return $this->hasMany(RecurringExpenseLog::class);
+    }
+
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'recurring_income_tag');
+        return $this->belongsToMany(Tag::class, 'recurring_expense_tag');
     }
 }
+

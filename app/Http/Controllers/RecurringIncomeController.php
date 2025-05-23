@@ -18,14 +18,17 @@ class RecurringIncomeController extends Controller
 
     public function create()
     {
-        return view('recurring-incomes.create');
+        $categories = Auth::user()->categories()->orderBy('name')->get();
+        $tags = Auth::user()->tags()->orderBy('name')->get();
+
+        return view('recurring-incomes.create', compact('categories', 'tags'));
     }
 
     public function store(Request $request)
     {
         $request->validate($this->rules());
 
-        RecurringIncome::create([
+        $recurring = RecurringIncome::create([
             'user_id' => Auth::id(),
             'source' => $request->source,
             'amount' => $request->amount,
@@ -33,7 +36,10 @@ class RecurringIncomeController extends Controller
             'start_date' => $request->start_date,
             'day_of_month' => $request->day_of_month ?? null,
             'notes' => $request->notes,
+            'category_id' => $request->category_id,
         ]);
+
+        $recurring->tags()->sync($request->input('tags', []));
 
         return redirect()->route('recurring-incomes.index')->with('success', 'Recurring income added.');
     }
@@ -41,7 +47,11 @@ class RecurringIncomeController extends Controller
     public function edit(RecurringIncome $recurringIncome)
     {
         $this->authorize('update', $recurringIncome);
-        return view('recurring-incomes.edit', compact('recurringIncome'));
+        $categories = Auth::user()->categories()->orderBy('name')->get();
+        $tags = Auth::user()->tags()->orderBy('name')->get();
+
+        return view('recurring-incomes.edit', compact('recurringIncome', 'categories', 'tags'));
+
     }
 
     public function update(Request $request, RecurringIncome $recurringIncome)
@@ -51,8 +61,10 @@ class RecurringIncomeController extends Controller
         $request->validate($this->rules());
 
         $recurringIncome->update($request->only([
-            'source', 'amount', 'frequency', 'start_date', 'day_of_month', 'notes'
+            'source', 'amount', 'frequency', 'start_date', 'day_of_month', 'notes', 'category_id'
         ]));
+
+        $recurringIncome->tags()->sync($request->input('tags', []));
 
         return redirect()->route('recurring-incomes.index')->with('success', 'Recurring income updated.');
     }

@@ -33,6 +33,27 @@
             <x-heroicon-o-credit-card class="w-5 h-5 flex-shrink-0" />
             <span x-show="!collapsed">Expenses</span>
         </a>
+        <!-- Recurring Expenses -->
+        <a href="{{ route('recurring-expenses.index') }}"
+        class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 {{ request()->routeIs('recurring-expenses.*') ? 'bg-gray-200 font-semibold' : '' }}"
+        :title="collapsed ? 'Recurring Expenses' : ''">
+            <x-heroicon-o-arrow-path-rounded-square class="w-5 h-5 flex-shrink-0" />
+            <span x-show="!collapsed">Recurring Expenses</span>
+        </a>
+        <a href="{{ route('recurring-income-logs.index') }}"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 {{ request()->routeIs('recurring-income-logs.*') ? 'bg-gray-200 font-semibold' : '' }}"
+            :title="collapsed ? 'Recurring Logs' : ''">
+                <x-heroicon-o-clipboard-document class="w-5 h-5 flex-shrink-0" />
+                <span x-show="!collapsed">Income Logs</span>
+        </a>
+        <!-- Recurring Expense Logs -->
+        <a href="{{ route('recurring-expense-logs.index') }}"
+        class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 {{ request()->routeIs('recurring-expense-logs.*') ? 'bg-gray-200 font-semibold' : '' }}"
+        :title="collapsed ? 'Expense Logs' : ''">
+            <x-heroicon-o-clipboard-document-check class="w-5 h-5 flex-shrink-0" />
+            <span x-show="!collapsed">Expense Logs</span>
+        </a>
+
         <a href="{{ route('goals.index') }}"
            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 {{ request()->routeIs('goals.*') ? 'bg-gray-200 font-semibold' : '' }}"
            :title="collapsed ? 'Goals' : ''">
