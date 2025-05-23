@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class ExpenseController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
         $expenses = Expense::where('user_id', Auth::id())

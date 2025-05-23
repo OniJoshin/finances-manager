@@ -6,9 +6,13 @@ use App\Models\RecurringExpense;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class RecurringExpenseController extends Controller
 {
+    use AuthorizesRequests;
+    
     public function index()
     {
         $recurrings = RecurringExpense::where('user_id', Auth::id())->latest()->get();
