@@ -1,4 +1,32 @@
 <x-app-layout>
-    <h1 class="text-2xl font-bold mb-4">Backup</h1>
-    <p class="text-gray-600">This is the placeholder for Backup and Restore functionality.</p>
+    <h1 class="text-2xl font-bold mb-4">Backup & Restore</h1>
+
+    @if (session('success'))
+        <div class="text-green-600 mb-4">{{ session('success') }}</div>
+    @endif
+
+    <div class="space-y-6">
+
+        <div class="bg-white p-4 rounded-xl shadow">
+            <h2 class="font-semibold mb-2">Export Data</h2>
+            <p class="text-sm text-gray-600 mb-2">Download your full financial data as a CSV file.</p>
+            <a href="{{ route('backup.export') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Download CSV</a>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow">
+            <h2 class="font-semibold mb-2">Import Data</h2>
+            <p class="text-sm text-gray-600 mb-2">Upload a CSV file of your expenses or incomes.</p>
+            <form method="POST" action="{{ route('backup.import') }}" enctype="multipart/form-data" class="space-y-2">
+                @csrf
+                <input type="file" name="csv" accept=".csv" required class="block border p-2 rounded w-full">
+                <label class="flex items-center gap-2 text-sm">
+                    <input type="checkbox" name="dry_run" value="1">
+                    Perform dry run (no changes will be saved)
+                </label>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Import</button>
+            </form>
+
+        </div>
+
+    </div>
 </x-app-layout>

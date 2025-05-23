@@ -51,12 +51,6 @@
         @error('tags') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
     </div>
 
-    <div class="flex items-center space-x-2">
-        <input type="checkbox" name="is_recurring" value="1"
-               @checked(old('is_recurring', $expense->is_recurring ?? false))>
-        <label class="text-sm">Recurring</label>
-    </div>
-
     <div>
         <label class="block text-sm font-medium">Notes</label>
         <textarea name="notes" class="w-full border p-2 rounded">{{ old('notes', $expense->notes ?? '') }}</textarea>

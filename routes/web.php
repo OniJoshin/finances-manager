@@ -47,4 +47,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth'])->prefix('backup')->name('backup.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\BackupController::class, 'index'])->name('index');
+    Route::get('/export', [\App\Http\Controllers\BackupController::class, 'export'])->name('export');
+    Route::post('/import', [\App\Http\Controllers\BackupController::class, 'import'])->name('import');
+});
+
 require __DIR__.'/auth.php';

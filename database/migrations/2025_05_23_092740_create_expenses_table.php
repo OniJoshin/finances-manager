@@ -17,7 +17,6 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->date('spent_at');
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
-            $table->boolean('is_recurring')->default(false);
             $table->text('notes')->nullable();
             $table->timestamps();
         });

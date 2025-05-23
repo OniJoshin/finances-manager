@@ -40,7 +40,6 @@ class ExpenseController extends Controller
             'amount' => $request->amount,
             'spent_at' => $request->spent_at,
             'category_id' => $request->category_id,
-            'is_recurring' => $request->boolean('is_recurring'),
             'notes' => $request->notes,
         ]);
 
@@ -68,7 +67,6 @@ class ExpenseController extends Controller
             'amount' => $request->amount,
             'spent_at' => $request->spent_at,
             'category_id' => $request->category_id,
-            'is_recurring' => $request->boolean('is_recurring'),
             'notes' => $request->notes,
         ]);
 
@@ -94,7 +92,6 @@ class ExpenseController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
-            'is_recurring' => 'sometimes|boolean',
             'notes' => 'nullable|string',
         ];
     }

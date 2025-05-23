@@ -17,7 +17,6 @@
                 <th class="px-4 py-2">Date</th>
                 <th class="px-4 py-2">Category</th>
                 <th class="px-4 py-2">Tags</th>
-                <th class="px-4 py-2">Recurring</th>
                 <th class="px-4 py-2">Actions</th>
             </tr>
         </thead>
@@ -33,7 +32,6 @@
                             <span class="bg-gray-200 text-xs px-2 py-1 rounded">{{ $tag->name }}</span>
                         @endforeach
                     </td>
-                    <td class="px-4 py-2">{{ $expense->is_recurring ? 'Yes' : 'No' }}</td>
                     <td class="px-4 py-2 flex gap-2">
                         <a href="{{ route('expenses.edit', $expense) }}" class="text-blue-600 hover:underline">Edit</a>
                         <form action="{{ route('expenses.destroy', $expense) }}" method="POST"
