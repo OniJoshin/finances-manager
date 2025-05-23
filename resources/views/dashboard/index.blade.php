@@ -97,13 +97,17 @@
             </div>
 
 
-            <!-- Tags & Categories (placeholder) -->
+            <!-- Top Expense Categories -->
             <div class="bg-white p-4 rounded-xl shadow">
-                <h2 class="text-lg font-semibold mb-2">Tags & Categories</h2>
-                <p class="text-sm text-gray-500">Manage and apply to expenses</p>
-                <div class="flex flex-wrap gap-2 mt-2 text-sm text-gray-500">
-                    Coming soon
-                </div>
+                <h2 class="text-lg font-semibold mb-2">Top Categories This Month</h2>
+                @forelse ($topCategories as $category)
+                    <div class="flex justify-between text-sm py-1 border-b last:border-b-0">
+                        <span>{{ $category['name'] }}</span>
+                        <span class="text-red-600 font-semibold">£{{ number_format($category['total'], 2) }}</span>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">No expenses yet this month.</p>
+                @endforelse
             </div>
 
         </div>

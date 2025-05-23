@@ -85,5 +85,13 @@
             <x-heroicon-o-cloud class="w-5 h-5 flex-shrink-0" />
             <span x-show="!collapsed">Backup</span>
         </a>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit"
+                class="w-full flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 text-left text-sm text-red-600">
+                <x-heroicon-o-arrow-left-on-rectangle class="w-5 h-5 flex-shrink-0" />
+                <span x-show="!collapsed">Logout</span>
+            </button>
+        </form>
     </nav>
 </aside>

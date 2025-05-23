@@ -7,6 +7,7 @@ use App\Models\Expense;
 use App\Models\Bill;
 use App\Models\Budget;
 use App\Models\SavingsGoal;
+use App\Models\Category;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -81,6 +82,21 @@ class DashboardController extends Controller
 
             $goals = SavingsGoal::where('user_id', $userId)->get();
 
-        return view('dashboard.index', compact('monthlyIncomeTotal', 'recentIncomes', 'monthlyExpenseTotal', 'recentExpenses', 'billsThisMonth', 'monthlyBillsTotal', 'budgets', 'goals'));
+            $topCategories = Expense::where('user_id', $userId)
+                ->whereBetween('spent_at', [$monthStart, $monthEnd])
+                ->with('category')
+                ->get()
+                ->groupBy('category_id')
+                ->map(function ($group) {
+                    return [
+                        'name' => optional($group->first()->category)->name ?? 'Uncategorised',
+                        'total' => $group->sum('amount'),
+                    ];
+                })
+                ->sortByDesc('total')
+                ->take(5)
+                ->values();
+
+        return view('dashboard.index', compact('monthlyIncomeTotal', 'recentIncomes', 'monthlyExpenseTotal', 'recentExpenses', 'billsThisMonth', 'monthlyBillsTotal', 'budgets', 'goals', 'topCategories'));
     }
 }
