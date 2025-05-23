@@ -7,22 +7,38 @@
             <!-- Monthly Summary (placeholder for income vs expense) -->
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-2">Monthly Summary</h2>
-                <p class="text-sm text-gray-500">Income vs Expenses</p>
-                <div class="mt-2 text-sm">
+                <p class="text-sm text-gray-500">Income vs Expenses + Bills</p>
+                <div class="mt-2 text-sm space-y-1">
                     <div class="text-green-600 font-semibold">Income: £{{ number_format($monthlyIncomeTotal, 2) }}</div>
                     <div class="text-red-600 font-semibold">Expenses: £{{ number_format($monthlyExpenseTotal, 2) }}</div>
-                    <div class="mt-1 text-blue-600 font-semibold">Net: £{{ number_format($monthlyIncomeTotal - $monthlyExpenseTotal, 2) }}</div>
+                    <div class="text-orange-600 font-semibold">Bills: £{{ number_format($monthlyBillsTotal, 2) }}</div>
+                    <div class="mt-1 text-blue-600 font-semibold">
+                        Net (after expenses): £{{ number_format($monthlyIncomeTotal - $monthlyExpenseTotal, 2) }}
+                    </div>
+                    <div class="text-purple-600 font-semibold">
+                        Projected Net (after bills): £{{ number_format($monthlyIncomeTotal - $monthlyExpenseTotal - $monthlyBillsTotal, 2) }}
+                    </div>
                 </div>
             </div>
 
 
+
             <!-- Upcoming Bills (placeholder) -->
             <div class="bg-white p-4 rounded-xl shadow">
-                <h2 class="text-lg font-semibold mb-2">Upcoming Bills</h2>
+                <h2 class="text-lg font-semibold mb-2">Monthly Bills</h2>
                 <ul class="text-sm text-gray-700 space-y-1">
-                    <li class="text-gray-400">Not implemented yet</li>
+                    @forelse ($billsThisMonth as $bill)
+                        <li>
+                            {{ $bill->name }} 
+                            <span class="text-gray-500">({{ $bill->next_due_date->format('M j') }})</span>
+                            <span class="text-red-600 font-semibold">£{{ number_format($bill->amount, 2) }}</span>
+                        </li>
+                    @empty
+                        <li class="text-gray-400">No upcoming bills</li>
+                    @endforelse
                 </ul>
             </div>
+
 
             <!-- Income Overview (real data) -->
             <div class="bg-white p-4 rounded-xl shadow">
@@ -33,27 +49,53 @@
                 </div>
             </div>
 
-            <!-- Expenses Overview (placeholder) -->
+            <!-- Budget Summary -->
             <div class="bg-white p-4 rounded-xl shadow">
-                <h2 class="text-lg font-semibold mb-2">Expenses Breakdown</h2>
-                <div class="h-24 bg-gray-100 rounded mt-2 flex items-center justify-center text-gray-400">
-                    Pie chart coming soon
-                </div>
-            </div>
-
-            <!-- Financial Goals (placeholder) -->
-            <div class="bg-white p-4 rounded-xl shadow">
-                <h2 class="text-lg font-semibold mb-2">Financial Goals</h2>
-                <p class="text-sm text-gray-500">Progress</p>
-                <div class="mt-2 space-y-2">
-                    <div class="bg-gray-100 p-2 rounded">
-                        <span class="block text-sm">Holiday Fund</span>
-                        <div class="w-full bg-gray-200 h-2 rounded-full">
-                            <div class="bg-blue-500 h-2 rounded-full w-2/3"></div>
+                <h2 class="text-lg font-semibold mb-2">Budget Summary</h2>
+                @forelse ($budgets as $budget)
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>{{ $budget->category->name }}</span>
+                            <span class="{{ $budget->status === 'over' ? 'text-red-600' : ($budget->status === 'near' ? 'text-yellow-600' : 'text-green-600') }}">
+                                {{ $budget->percent_used }}% used
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                            <div class="h-2 rounded-full {{ $budget->status === 'over' ? 'bg-red-600' : ($budget->status === 'near' ? 'bg-yellow-400' : 'bg-green-500') }}"
+                                style="width: {{ $budget->percent_used }}%"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1">
+                            £{{ number_format($budget->spent, 2) }} of £{{ number_format($budget->amount, 2) }}
                         </div>
                     </div>
-                </div>
+                @empty
+                    <div class="text-sm text-gray-500">No active budgets set.</div>
+                @endforelse
             </div>
+
+
+            <!-- Financial Goals -->
+            <div class="bg-white p-4 rounded-xl shadow">
+                <h2 class="text-lg font-semibold mb-2">Financial Goals</h2>
+
+                @forelse ($goals as $goal)
+                    <div class="mb-3">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>{{ $goal->name }}</span>
+                            <span class="text-blue-600">{{ $goal->percent_complete }}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="h-2 bg-blue-500 rounded-full" style="width: {{ $goal->percent_complete }}%"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1">
+                            £{{ number_format($goal->current_amount, 2) }} of £{{ number_format($goal->target_amount, 2) }}
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">No active savings goals.</p>
+                @endforelse
+            </div>
+
 
             <!-- Tags & Categories (placeholder) -->
             <div class="bg-white p-4 rounded-xl shadow">

@@ -54,6 +54,13 @@
             <span x-show="!collapsed">Expense Logs</span>
         </a>
 
+        <a href="{{ route('budgets.index') }}"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 {{ request()->routeIs('budgets.*') ? 'bg-gray-200 font-semibold' : '' }}"
+            :title="collapsed ? 'Budgets' : ''">
+                <x-heroicon-o-wallet class="w-5 h-5 flex-shrink-0" />
+                <span x-show="!collapsed">Budgets</span>
+        </a>
+
         <a href="{{ route('goals.index') }}"
            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 {{ request()->routeIs('goals.*') ? 'bg-gray-200 font-semibold' : '' }}"
            :title="collapsed ? 'Goals' : ''">
