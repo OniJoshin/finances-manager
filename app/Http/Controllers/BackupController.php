@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use League\Csv\Writer;
 use League\Csv\Reader;
 use SplTempFileObject;
+use App\Exports\FullBackupExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BackupController extends Controller
 {
@@ -23,37 +25,7 @@ class BackupController extends Controller
 
     public function export()
     {
-        $userId = Auth::id();
-
-        $csv = Writer::createFromFileObject(new SplTempFileObject());
-        $csv->insertOne(['Type', 'Name', 'Amount', 'Category ID', 'Date', 'Notes']);
-
-        // Expenses
-        foreach (Expense::where('user_id', $userId)->get() as $e) {
-            $csv->insertOne(['Expense', $e->name, $e->amount, $e->category_id, $e->spent_at, $e->notes]);
-        }
-
-        // Income
-        foreach (Income::where('user_id', $userId)->get() as $i) {
-            $csv->insertOne(['Income', $i->source, $i->amount, null, $i->received_at, null]);
-        }
-
-        // Budgets
-        foreach (Budget::where('user_id', $userId)->get() as $b) {
-            $csv->insertOne(['Budget', $b->category->name, $b->amount, $b->category_id, $b->start_date, $b->period]);
-        }
-
-        // Goals
-        foreach (SavingsGoal::where('user_id', $userId)->get() as $g) {
-            $notes = "Target: {$g->target_amount}" . ($g->notes ? " | {$g->notes}" : '');
-            $csv->insertOne(['Goal', $g->name, $g->current_amount, null, $g->target_date, $notes]);
-        }
-
-
-        return Response::make((string) $csv, 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="finance-backup.csv"',
-        ]);
+       return Excel::download(new FullBackupExport(), 'finance-backup.xlsx');
     }
 
     public function import(Request $request)
