@@ -12,7 +12,7 @@
         <thead class="bg-gray-100 text-left">
             <tr>
                 <th class="px-4 py-2">Name</th>
-                <th class="px-4 py-2">Type</th>
+                <th class="px-4 py-2">Category</th>
                 <th class="px-4 py-2">Amount</th>
                 <th class="px-4 py-2">Due Date</th>
                 <th class="px-4 py-2">Tags</th>
@@ -23,7 +23,7 @@
             @forelse ($bills as $bill)
                 <tr class="border-t">
                     <td class="px-4 py-2">{{ $bill->name }}</td>
-                    <td class="px-4 py-2">{{ $bill->type }}</td>
+                    <td class="px-4 py-2">{{ $bill->category->name ?? '—' }}</td>
                     <td class="px-4 py-2">£{{ number_format($bill->amount, 2) }}</td>
                     <td class="px-4 py-2">{{ $bill->next_due_date->format('Y-m-d') }}</td>
                     <td class="px-4 py-2">

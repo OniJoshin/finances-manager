@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Exports;
 
 use App\Models\RecurringExpense;
@@ -10,26 +9,30 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class RecurringExpensesSheetExport implements FromCollection, WithTitle, WithHeadings
 {
-    
-    /**
-    * @return \Illuminate\Support\Collection
-    */
     public function collection()
     {
-        return RecurringExpense::where('user_id', Auth::id())->get();
+        return RecurringExpense::with('tags')
+            ->where('user_id', Auth::id())
+            ->get()
+            ->map(function ($expense) {
+                return [
+                    'id' => $expense->id,
+                    'user_id' => $expense->user_id,
+                    'name' => $expense->name,
+                    'amount' => $expense->amount,
+                    'frequency' => $expense->frequency,
+                    'start_date' => $expense->start_date,
+                    'day_of_month' => $expense->day_of_month,
+                    'category_id' => $expense->category_id,
+                    'notes' => $expense->notes,
+                    'last_generated_at' => $expense->last_generated_at,
+                    'created_at' => $expense->created_at,
+                    'updated_at' => $expense->updated_at,
+                    'tags' => $expense->tags->pluck('name')->implode(', '),
+                ];
+            });
     }
 
-    /**
-     * @return string
-     */
-    public function title(): string
-    {
-        return 'Recurring Expenses';
-    }
-
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return [
@@ -45,6 +48,12 @@ class RecurringExpensesSheetExport implements FromCollection, WithTitle, WithHea
             'Last Generated At',
             'Created At',
             'Updated At',
+            'Tags',
         ];
+    }
+
+    public function title(): string
+    {
+        return 'Recurring Expenses';
     }
 }

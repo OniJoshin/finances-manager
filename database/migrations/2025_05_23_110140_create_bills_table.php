@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->enum('type', ['Utility', 'Subscription', 'Rent', 'Loan', 'Other']);
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->decimal('amount', 10, 2);
             $table->enum('frequency', ['weekly', 'monthly', 'yearly']);
             $table->date('next_due_date');

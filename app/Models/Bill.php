@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,7 +13,7 @@ class Bill extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'type',
+        'category_id',
         'amount',
         'frequency',
         'next_due_date',
@@ -31,6 +32,11 @@ class Bill extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'bill_tag');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
 }

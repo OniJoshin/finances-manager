@@ -7,13 +7,17 @@
     </div>
 
     <div>
-        <label class="block text-sm font-medium">Type</label>
-        <select name="type" class="w-full border p-2 rounded" required>
-            @foreach(['Utility', 'Subscription', 'Rent', 'Loan', 'Other'] as $option)
-                <option value="{{ $option }}" @selected(old('type', $bill->type ?? '') == $option)> {{ $option }} </option>
+        <label class="block text-sm font-medium">Category</label>
+        <select name="category_id" class="w-full border p-2 rounded">
+            <option value="">-- None --</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}"
+                    @selected(old('category_id', $bill->category_id ?? '') == $category->id)>
+                    {{ $category->name }}
+                </option>
             @endforeach
         </select>
-        @error('type') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
+        @error('category_id') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
     </div>
 
     <div>

@@ -10,23 +10,30 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class RecurringIncomesSheetExport implements FromCollection, WithTitle, WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
     public function collection()
     {
-        return RecurringIncome::where('user_id', Auth::id())->get();
+        return RecurringIncome::with('tags')
+            ->where('user_id', Auth::id())
+            ->get()
+            ->map(function ($income) {
+                return [
+                    'id' => $income->id,
+                    'user_id' => $income->user_id,
+                    'source' => $income->source,
+                    'amount' => $income->amount,
+                    'frequency' => $income->frequency,
+                    'start_date' => $income->start_date,
+                    'day_of_month' => $income->day_of_month,
+                    'notes' => $income->notes,
+                    'last_generated_at' => $income->last_generated_at,
+                    'created_at' => $income->created_at,
+                    'updated_at' => $income->updated_at,
+                    'category_id' => $income->category_id,
+                    'tags' => $income->tags->pluck('name')->implode(', '),
+                ];
+            });
     }
-    /**
-     * @return string
-     */
-    public function title(): string
-    {
-        return 'Recurring Incomes';
-    }
-    /**
-     * @return array
-     */
+
     public function headings(): array
     {
         return [
@@ -42,6 +49,12 @@ class RecurringIncomesSheetExport implements FromCollection, WithTitle, WithHead
             'Created At',
             'Updated At',
             'Category ID',
+            'Tags',
         ];
+    }
+
+    public function title(): string
+    {
+        return 'Recurring Incomes';
     }
 }

@@ -16,7 +16,7 @@ class BillController extends Controller
     public function index()
     {
         $bills = Bill::where('user_id', Auth::id())
-            ->with('tags')
+            ->with('category', 'tags')
             ->latest('next_due_date')
             ->paginate(10);
 
@@ -25,8 +25,9 @@ class BillController extends Controller
 
     public function create()
     {
+        $categories = Auth::user()->categories()->orderBy('name')->get();
         $tags = Auth::user()->tags()->orderBy('name')->get();
-        return view('bills.create', compact('tags'));
+        return view('bills.create', compact('tags', 'categories'));
     }
 
     public function store(Request $request)
@@ -36,7 +37,7 @@ class BillController extends Controller
         $bill = Bill::create([
             'user_id' => Auth::id(),
             'name' => $request->name,
-            'type' => $request->type,
+            'category_id' => $request->category_id,
             'amount' => $request->amount,
             'frequency' => $request->frequency,
             'next_due_date' => $request->next_due_date,
@@ -52,8 +53,9 @@ class BillController extends Controller
     {
         $this->authorize('update', $bill);
 
+        $categories = Auth::user()->categories()->orderBy('name')->get();
         $tags = Auth::user()->tags()->orderBy('name')->get();
-        return view('bills.edit', compact('bill', 'tags'));
+        return view('bills.edit', compact('bill', 'tags', 'categories'));
     }
 
     public function update(Request $request, Bill $bill)
@@ -63,7 +65,7 @@ class BillController extends Controller
 
         $bill->update([
             'name' => $request->name,
-            'type' => $request->type,
+            'category_id' => $request->category_id,
             'amount' => $request->amount,
             'frequency' => $request->frequency,
             'next_due_date' => $request->next_due_date,
@@ -87,7 +89,7 @@ class BillController extends Controller
     {
         return [
             'name' => 'required|string|max:255',
-            'type' => 'required|in:Utility,Subscription,Rent,Loan,Other',
+            'category_id' => 'nullable|exists:categories,id',
             'amount' => 'required|numeric|min:0',
             'frequency' => 'required|in:weekly,monthly,yearly',
             'next_due_date' => 'required|date',

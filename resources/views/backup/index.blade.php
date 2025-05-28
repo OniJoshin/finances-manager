@@ -18,13 +18,10 @@
             <p class="text-sm text-gray-600 mb-2">Upload a CSV file of your expenses or incomes.</p>
             <form method="POST" action="{{ route('backup.import') }}" enctype="multipart/form-data" class="space-y-2">
                 @csrf
-                <input type="file" name="csv" accept=".csv" required class="block border p-2 rounded w-full">
-                <label class="flex items-center gap-2 text-sm">
-                    <input type="checkbox" name="dry_run" value="1">
-                    Perform dry run (no changes will be saved)
-                </label>
-                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Import</button>
+                <input type="file" name="excel" accept=".xlsx,.xls" required class="block border p-2 rounded w-full">
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Import Excel File</button>
             </form>
+
 
         </div>
 
