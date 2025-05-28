@@ -29,7 +29,9 @@
         <button @click="collapsed = !collapsed" class="text-gray-600 hover:text-gray-800">
             <x-heroicon-o-bars-3 class="w-6 h-6" />
         </button>
-        <h2 class="font-semibold text-lg">Finance Manager</h2>
+        <a href="/">
+            <x-application-logo class="w-40 h-auto" />
+        </a>
     </header>
 
     <!-- Page Content -->
