@@ -37,6 +37,7 @@ class SavingsGoalTest extends TestCase
         $this->assertSame(0, $goal->percent_complete);
     }
 
+
     public function test_percent_complete_rounds_to_nearest_integer(): void
     {
         $goal = new SavingsGoal([

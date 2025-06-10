@@ -24,6 +24,7 @@ class IdMappingRegistryTest extends TestCase
         $this->assertFalse($registry->has('tags', 999));
     }
 
+
     public function test_set_overwrites_existing_mapping(): void
     {
         $registry = new IdMappingRegistry();

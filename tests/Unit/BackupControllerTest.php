@@ -17,6 +17,7 @@ class BackupControllerTest extends TestCase
         return $method->invoke($controller, $notes);
     }
 
+
     /**
      * @dataProvider notesProvider
      */
@@ -33,6 +34,19 @@ class BackupControllerTest extends TestCase
             'decimal value' => ['target: 750.50 more text', 750.50],
             'missing value uses default' => ['no target here', 1000.0],
         ];
+    }
+
+
+    public function test_extract_target_amount_parses_number_from_notes(): void
+    {
+        $result = $this->callExtractTarget('My notes Target: 1500 value');
+        $this->assertSame(1500.0, $result);
+    }
+
+    public function test_extract_target_amount_returns_default_when_missing(): void
+    {
+        $result = $this->callExtractTarget('no target here');
+        $this->assertSame(1000.0, $result);
     }
 
 }
