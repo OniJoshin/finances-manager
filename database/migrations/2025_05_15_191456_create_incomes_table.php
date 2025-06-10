@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->enum('frequency', ['one-time', 'weekly', 'monthly']);
             $table->date('received_at');
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->text('notes')->nullable();
             $table->timestamps();
         });

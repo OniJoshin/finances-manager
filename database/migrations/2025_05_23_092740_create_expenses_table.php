@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('name');
             $table->decimal('amount', 10, 2);
             $table->date('spent_at');
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
