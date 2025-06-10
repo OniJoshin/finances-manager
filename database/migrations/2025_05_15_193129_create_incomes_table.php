@@ -1,4 +1,6 @@
 <?php
+// This migration must run after the categories table migration so the
+// foreign key on "category_id" can be created successfully.
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
