@@ -16,6 +16,7 @@ class RecurringIncome extends Model
         'day_of_month',
         'notes',
         'last_generated_at',
+        'category_id',
     ];
 
     protected $casts = [

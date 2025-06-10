@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('day_of_month')->nullable(); // set by user or extracted from start_date
             $table->text('notes')->nullable();
             $table->date('last_generated_at')->nullable(); // tracks most recent entry
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }
