@@ -27,6 +27,6 @@ class SavingsGoal extends Model
     public function getPercentCompleteAttribute()
     {
         if ($this->target_amount == 0) return 0;
-        return min(100, round(($this->current_amount / $this->target_amount) * 100));
+        return min(100, (int) round(($this->current_amount / $this->target_amount) * 100));
     }
 }
